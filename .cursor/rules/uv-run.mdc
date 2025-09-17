@@ -1,0 +1,185 @@
+---
+alwaysApply: true
+---
+# Cursor Rules for UV Python Package Manager
+
+## Python Environment Management
+
+**ALWAYS use UV instead of pip, pip3, python, or python3 for Python operations.**
+
+UV is an extremely fast Python package installer and resolver written in Rust. It's a drop-in replacement for pip and pip-tools, and it's 10-100x faster than pip.
+
+### Adding Dependencies
+
+**Always use `uv add` to add new dependencies to a project:**
+
+```bash
+# Wrong
+pip install requests
+uv pip install requests
+
+# Correct
+uv add requests
+```
+
+Multiple packages:
+```bash
+# Wrong
+pip install flask pandas numpy
+
+# Correct
+uv add flask pandas numpy
+```
+
+With version constraints:
+```bash
+# Correct
+uv add "flask>=2.0"
+uv add "pandas==2.1.0"
+```
+
+Development dependencies:
+```bash
+# Correct
+uv add --dev pytest black flake8
+```
+
+### Installing Existing Dependencies
+
+For installing dependencies from existing requirements.txt or pyproject.toml:
+
+```bash
+# From requirements.txt
+uv pip install -r requirements.txt
+
+# From pyproject.toml (sync all dependencies)
+uv sync
+```
+
+### Running Python Scripts
+
+When running Python scripts, use `uv run`:
+
+```bash
+# Wrong
+python script.py
+python3 script.py
+
+# Correct
+uv run script.py
+```
+
+### Managing Dependencies
+
+- **Removing packages**:
+  ```bash
+  # Wrong
+  pip uninstall package_name
+  
+  # Correct
+  uv remove package_name
+  ```
+
+- **Listing installed packages**:
+  ```bash
+  # Wrong
+  pip list
+  
+  # Correct
+  uv pip list
+  ```
+
+- **Showing package details**:
+  ```bash
+  # Wrong
+  pip show package_name
+  
+  # Correct
+  uv pip show package_name
+  ```
+
+### Virtual Environment Management
+
+- **Creating virtual environments**: Use `uv venv` instead of `python -m venv`
+  ```bash
+  # Wrong
+  python -m venv myenv
+  
+  # Correct
+  uv venv myenv
+  ```
+
+- **Activating virtual environments**:
+  ```bash
+  # Unix/macOS
+  source .venv/bin/activate
+  
+  # Windows
+  .venv\Scripts\activate
+  ```
+
+### Common UV Commands
+
+- `uv add [package]` - Add a new dependency to the project
+- `uv add --dev [package]` - Add a development dependency
+- `uv remove [package]` - Remove a dependency
+- `uv sync` - Sync all dependencies from pyproject.toml
+- `uv pip install -r requirements.txt` - Install from requirements file
+- `uv pip list` - List installed packages
+- `uv pip show [package]` - Show package details
+- `uv venv` - Create a virtual environment
+- `uv run [script]` - Run a Python script
+
+### Important Notes
+
+1. **Always check if UV is installed** before using it. If not installed, suggest installation:
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
+   Or on Windows:
+   ```powershell
+   powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+   ```
+
+2. **Adding vs Installing**: 
+   - Use `uv add` when adding NEW dependencies to a project
+   - Use `uv pip install` only for installing from existing requirements.txt
+   - Use `uv sync` to sync all dependencies from pyproject.toml
+
+3. **Virtual environments**: Always recommend using virtual environments for Python projects, and use `uv venv` to create them.
+
+4. **Performance**: UV is significantly faster than pip, especially for large projects with many dependencies.
+
+5. **Lock files**: UV automatically manages `uv.lock` files for reproducible installations when using `uv add`.
+
+### Example Commands
+
+When working with Python dependencies:
+
+```bash
+# Add a new dependency
+uv add requests
+
+# Add multiple dependencies
+uv add flask sqlalchemy pytest
+
+# Add with version constraints
+uv add "django>=4.0,<5.0"
+
+# Add development dependencies
+uv add --dev black pytest mypy
+
+# Remove a dependency
+uv remove requests
+
+# Sync all dependencies from pyproject.toml
+uv sync
+
+# Run a Python script
+uv run main.py
+```
+
+**Remember**: 
+- Use `uv add` for adding new dependencies (not `uv pip install`)
+- Use `uv run` for executing Python scripts (not `python`)
+- UV commands provide better performance and modern dependency management

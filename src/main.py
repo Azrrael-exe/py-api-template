@@ -4,6 +4,7 @@ import uvicorn
 from src.presentation.dependencies.container import Container
 from src.presentation.controllers.http.health_check_controller import get_health_check_controller
 from src.presentation.controllers.http.flip_word_controller import get_flip_word_controller
+from src.presentation.controllers.http.repository_controller import get_repository_controller
 
 
 @asynccontextmanager
@@ -23,6 +24,7 @@ async def lifespan(app: FastAPI):
     container = Container()
     app.include_router(router=get_health_check_controller(container), prefix="/api")
     app.include_router(router=get_flip_word_controller(container), prefix="/api")
+    app.include_router(router=get_repository_controller(container), prefix="/api")
     
     yield
     

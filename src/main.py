@@ -1,11 +1,20 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 import uvicorn
+import json
 from src.presentation.dependencies.container import Container
 from src.presentation.controllers.http.health_check_controller import get_health_check_controller
 from src.presentation.controllers.http.flip_word_controller import get_flip_word_controller
 from src.presentation.controllers.http.repository_controller import get_repository_controller
+from src.presentation.controllers.mqtt.repository_controller import controller_on_message_handler
+from fastapi_mqtt.config import MQTTConfig
+from fastapi_mqtt.fastmqtt import FastMQTT
 
+fast_mqtt = FastMQTT(config=MQTTConfig(
+    host="broker.hivemq.com",
+    port=1883,
+    keepalive=60,
+))
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -25,11 +34,27 @@ async def lifespan(app: FastAPI):
     app.include_router(router=get_health_check_controller(container), prefix="/api")
     app.include_router(router=get_flip_word_controller(container), prefix="/api")
     app.include_router(router=get_repository_controller(container), prefix="/api")
+
+    print("🚀 Iniciando FastMQTT...")
+
+    @fast_mqtt.on_connect()
+    def connect(client, flags, rc, properties):
+        fast_mqtt.client.subscribe("/SDA_2025/#") #subscribing mqtt topic
+        print("Connected: ", client, flags, rc, properties)
+
+
+    @fast_mqtt.on_message()
+    async def message(client, topic, payload, qos, properties):
+        print("Received message: ",topic, payload.decode(), qos, properties)
+        controller_on_message_handler(client=client, topic=topic, payload=payload, container=container)
+
+    await fast_mqtt.mqtt_startup()
     
     yield
     
     # Código de limpieza - se ejecuta al cerrar la aplicación
     print("🛑 Cerrando aplicación...")
+    await fast_mqtt.mqtt_shutdown()
     
     # Aquí puedes agregar:
     # - Cierre de conexiones de base de datos
@@ -47,15 +72,13 @@ app = FastAPI(
 )
 
 
-
-
 def main():
     """Función principal para ejecutar el servidor"""
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
         port=8000,
-        reload=True
+        reload=False
     )
 
 

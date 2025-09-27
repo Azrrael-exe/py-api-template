@@ -9,7 +9,6 @@ class SaveKeyUseCase:
         self._storage.save(request.key, request.value)
         return ValueResponse(key=request.key, value=request.value)
 
-
 class GetKeyUseCase:
     def __init__(self, storage: IStorageInterface):
         self._storage = storage

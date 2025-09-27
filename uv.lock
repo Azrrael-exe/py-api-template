@@ -300,6 +300,19 @@ wheels = [
 ]
 
 [[package]]
+name = "fastapi-mqtt"
+version = "2.2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "gmqtt" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/2b/fd/2eb9400ac35f1cad795d76688e801e43f1a48c2bf869ee856bac16a1b921/fastapi_mqtt-2.2.0.tar.gz", hash = "sha256:68308fe47c068b4d2146b3eb10aa198fa08d827aa3dc3d081dd5821e53090b2b", size = 9572, upload-time = "2024-05-22T08:59:07.231Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/94/6e/01ee90c935f0eb52e69eac18baf7f8ef14f926d9cc2c04b52df1cba07b17/fastapi_mqtt-2.2.0-py3-none-any.whl", hash = "sha256:1bb5e5cca39457c72d9cd0e36b56817923f49ee1a9605fe8dbad36d5ce450c36", size = 9288, upload-time = "2024-05-22T08:59:04.621Z" },
+]
+
+[[package]]
 name = "flake8"
 version = "7.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -311,6 +324,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/9b/af/fbfe3c4b5a657d79e5c47a2827a362f9e1b763336a52f926126aa6dc7123/flake8-7.3.0.tar.gz", hash = "sha256:fe044858146b9fc69b551a4b490d69cf960fcb78ad1edcb84e7fbb1b4a8e3872", size = 48326, upload-time = "2025-06-20T19:31:35.838Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9f/56/13ab06b4f93ca7cac71078fbe37fcea175d3216f31f85c3168a6bbd0bb9a/flake8-7.3.0-py2.py3-none-any.whl", hash = "sha256:b9696257b9ce8beb888cdbe31cf885c90d31928fe202be0889a7cdafad32f01e", size = 57922, upload-time = "2025-06-20T19:31:34.425Z" },
+]
+
+[[package]]
+name = "gmqtt"
+version = "0.7.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/21/70/73ec54da16079da319b035af48b908204f9629ecd1187720d11799ac35d8/gmqtt-0.7.0.tar.gz", hash = "sha256:bedfec7bac26b6b4ce1f0c4c32cff3d663526a54c882d323d41560fc3b9b44a2", size = 27663, upload-time = "2024-11-22T13:13:48.679Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3e/2f/63922e256799a74b0e1fb1c12e98dc435edf1ddaa7e31eaadc60cbd16593/gmqtt-0.7.0-py3-none-any.whl", hash = "sha256:3e5571a20e9c115d83d600caa228b06f716087653e241035e29cec73277b52cc", size = 30688, upload-time = "2024-11-22T13:13:46.479Z" },
 ]
 
 [[package]]
@@ -692,6 +714,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "fastapi" },
+    { name = "fastapi-mqtt" },
     { name = "ipykernel" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
@@ -715,6 +738,7 @@ dev = [
 requires-dist = [
     { name = "black", marker = "extra == 'dev'", specifier = ">=23.9.0" },
     { name = "fastapi", specifier = ">=0.104.0" },
+    { name = "fastapi-mqtt", specifier = ">=2.2.0" },
     { name = "flake8", marker = "extra == 'dev'", specifier = ">=6.1.0" },
     { name = "httpx", marker = "extra == 'dev'", specifier = ">=0.25.0" },
     { name = "ipykernel", specifier = ">=6.30.1" },
